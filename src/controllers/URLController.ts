@@ -23,11 +23,13 @@ export class URLController {
   public async redirect(request: Request, response: Response): Promise<void> {
     const { hash } = request.params
 
-    const url = {
-      originURL: "testedeurlparashorten",
-      hash: "g_KCtqXtv",
-      shortURL: "http://localhost:5000/g_KCtqXtv"
+    const url = await URLModel.findOne({ hash })
+
+    if (url) {
+      response.redirect(url.originURL);
+    } else {
+      response.status(404).json({error: 'url not found'})
     }
-    response.redirect(url.originURL);
+
   }
 }
